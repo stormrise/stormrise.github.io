@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://github.com/stormrise/stormrise.github.io.git</id>
+    <id>https://github.com/stormrise/stormrise.github.io</id>
     <title>嗨，这里是stormrise！</title>
-    <updated>2020-04-11T14:44:40.703Z</updated>
+    <updated>2020-04-12T13:53:42.021Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://github.com/stormrise/stormrise.github.io.git"/>
-    <link rel="self" href="https://github.com/stormrise/stormrise.github.io.git/atom.xml"/>
+    <link rel="alternate" href="https://github.com/stormrise/stormrise.github.io"/>
+    <link rel="self" href="https://github.com/stormrise/stormrise.github.io/atom.xml"/>
     <subtitle>随便写点东西的地方</subtitle>
-    <logo>https://github.com/stormrise/stormrise.github.io.git/images/avatar.png</logo>
-    <icon>https://github.com/stormrise/stormrise.github.io.git/favicon.ico</icon>
+    <logo>https://github.com/stormrise/stormrise.github.io/images/avatar.png</logo>
+    <icon>https://github.com/stormrise/stormrise.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, 嗨，这里是stormrise！</rights>
     <entry>
         <title type="html"><![CDATA[关于为啥不用hexo博客了]]></title>
-        <id>https://github.com/stormrise/stormrise.github.io.git/post/guan-yu-wei-sha-bu-yong-hexo-bo-ke-liao/</id>
-        <link href="https://github.com/stormrise/stormrise.github.io.git/post/guan-yu-wei-sha-bu-yong-hexo-bo-ke-liao/">
+        <id>https://github.com/stormrise/stormrise.github.io/post/guan-yu-wei-sha-bu-yong-hexo-bo-ke-liao/</id>
+        <link href="https://github.com/stormrise/stormrise.github.io/post/guan-yu-wei-sha-bu-yong-hexo-bo-ke-liao/">
         </link>
         <updated>2020-04-11T14:37:18.000Z</updated>
         <summary type="html"><![CDATA[<p>好看确实是好看，但是失去了写文字的初衷，由于没有服务器，同步文章会很麻烦</p>
@@ -32,8 +32,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://github.com/stormrise/stormrise.github.io.git/post/hello-gridea/</id>
-        <link href="https://github.com/stormrise/stormrise.github.io.git/post/hello-gridea/">
+        <id>https://github.com/stormrise/stormrise.github.io/post/hello-gridea/</id>
+        <link href="https://github.com/stormrise/stormrise.github.io/post/hello-gridea/">
         </link>
         <updated>2018-12-11T16:00:00.000Z</updated>
         <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
