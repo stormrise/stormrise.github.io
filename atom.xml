@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://stormrise.github.io</id>
     <title>嗨，这里是stormrise！</title>
-    <updated>2020-04-12T13:58:29.763Z</updated>
+    <updated>2020-04-28T16:15:30.728Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://stormrise.github.io"/>
     <link rel="self" href="https://stormrise.github.io/atom.xml"/>
@@ -10,6 +10,44 @@
     <logo>https://stormrise.github.io/images/avatar.png</logo>
     <icon>https://stormrise.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, 嗨，这里是stormrise！</rights>
+    <entry>
+        <title type="html"><![CDATA[搭建我的世界私服-2020]]></title>
+        <id>https://stormrise.github.io/post/wo-de-shi-jie/</id>
+        <link href="https://stormrise.github.io/post/wo-de-shi-jie/">
+        </link>
+        <updated>2020-04-28T15:48:42.000Z</updated>
+        <summary type="html"><![CDATA[<p>最近想和好友玩我的世界，想着之前玩过一些大佬的私服，准备自己来搭一个，<strong>官方版纯净生存服务器</strong></p>
+]]></summary>
+        <content type="html"><![CDATA[<p>最近想和好友玩我的世界，想着之前玩过一些大佬的私服，准备自己来搭一个，<strong>官方版纯净生存服务器</strong></p>
+<!-- more -->
+<h1 id="准备">准备</h1>
+<p>首先我买了一个阿里云（为了一个公网IP，<br>
+考虑到方便，我选择了用docker来搭</p>
+<h3 id="安装docker">安装docker</h3>
+<p><a href="https://yeasy.gitbooks.io/docker_practice/install/">一个比较专业的docker教程</a> ，从这里开始，装上之后记得去把<a href="https://yeasy.gitbooks.io/docker_practice/install/mirror.html">源设置</a>成阿里云的源（因为已经买了服务器了，就有账号会获得一个镜像地址。）<br>
+当然这里需要注意，提前把docker的<a href="https://yeasy.gitbooks.io/docker_practice/network/dns.html">DNS设置</a>成1.1.1.1 最好，路径： <code>/etc/docker/daemon.json</code> (记得是在打括号里面添加，自己查一下json是怎么写的)，不然下一步就会无法解析mojang官网。</p>
+<p>接下来装一个 docker的管理界面，方便查看状态，以及不用ssh的情况下在网页端重启。<br>
+这里选择了我一直用的 <a href="https://www.portainer.io/installation/">portainer</a> ,</p>
+<pre><code class="language-bash">docker volume create portainer_data
+docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+</code></pre>
+<p>开启9000端口，你就可以看到这个界面了</p>
+<h3 id="安装我的世界">安装我的世界</h3>
+<p>下一步装我的世界，我选用了 https://github.com/itzg/docker-minecraft-server ，</p>
+<pre><code class="language-bash">#注意这里是root用户，其他用户请自行pwd查看路径
+mkdir data
+docker run -d -it -p 25565:25565 -e EULA=TRUE -v /root/data:/data --name mc itzg/minecraft-server
+</code></pre>
+<p>如果这一步下载server包失败的话，你需要一个“可用”的网络自行去mojang官网下载（自己谷歌），并且重命名为对应的版本号: minecraft_server.1.15.2.jar ，然后scp到服务器的/data目录下去</p>
+<p>记得打开25565这个端口号</p>
+<p>在本地登陆我的世界，多人游戏，输入IP地址，就可以连上去了，<br>
+第一次连接之后，需要给自己开管理员权限，在portainer里面点attach到mc这个容器，输入op #你的名字 即可授权成功，后续的操作可以直接在游戏里/op了或者/whitelist了</p>
+<p>改<a href="https://minecraft-zh.gamepedia.com/Server.properties">server.properties</a>这种在wiki里面去搜吧，主要是把online-mode设置成false就可以让盗版玩家上线了（对于那种还没买的小伙伴。</p>
+<p>这里提一句，请支持正版国际服，mojang官网购买，支持支付宝，165元人民币说实话不是很贵。</p>
+<p>好了，可以要请好友上线一起玩了！！！</p>
+<p>PS：我准备下一个写写怎么玩服务器，物尽其用</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[关于为啥不用hexo博客了]]></title>
         <id>https://stormrise.github.io/post/guan-yu-wei-sha-bu-yong-hexo-bo-ke-liao/</id>
