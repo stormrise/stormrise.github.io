@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://stormrise.github.io/favicon.ico?v=1588090523331">
+<link rel="shortcut icon" href="https://stormrise.github.io/favicon.ico?v=1588091140648">
 <link rel="stylesheet" href="https://stormrise.github.io/styles/main.css">
 
 
@@ -19,12 +19,10 @@
 
 
     <meta name="description" content="最近想和好友玩我的世界，想着之前玩过一些大佬的私服，准备自己来搭一个，官方版纯净生存服务器
-
+如何快速的搭建（几小时内），一键式傻瓜操作
 准备
-首先我买了一个阿里云（为了一个公网IP，
-考虑到方便，我选择了用docker来搭
-安装docker
-一个比较专业的docker教程 ，从这里..." />
+首先我买了一个阿里云学生机（为了一个公网IP，用私钥或者密码连接进去
+考虑到方便，我选择了用doc..." />
     <meta name="keywords" content="折腾" />
   </head>
   <body>
@@ -34,7 +32,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://stormrise.github.io">
-        <img src="https://stormrise.github.io/images/avatar.png?v=1588090523331" class="site-logo">
+        <img src="https://stormrise.github.io/images/avatar.png?v=1588091140648" class="site-logo">
         <h1 class="site-title">嗨，这里是stormrise！</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -105,10 +103,11 @@
             
             <div class="post-content" v-pre>
               <p>最近想和好友玩我的世界，想着之前玩过一些大佬的私服，准备自己来搭一个，<strong>官方版纯净生存服务器</strong></p>
-<!-- more -->
+<p>如何快速的搭建（几小时内），一键式傻瓜操作</p>
 <h1 id="准备">准备</h1>
-<p>首先我买了一个阿里云（为了一个公网IP，<br>
+<p>首先我买了一个阿里云学生机（为了一个公网IP，用私钥或者密码连接进去<br>
 考虑到方便，我选择了用docker来搭</p>
+<!-- more -->
 <h3 id="安装docker">安装docker</h3>
 <p><a href="https://yeasy.gitbooks.io/docker_practice/install/">一个比较专业的docker教程</a> ，从这里开始，装上之后记得去把<a href="https://yeasy.gitbooks.io/docker_practice/install/mirror.html">源设置</a>成阿里云的源（因为已经买了服务器了，就有账号会获得一个镜像地址。）<br>
 当然这里需要注意，提前把docker的<a href="https://yeasy.gitbooks.io/docker_practice/network/dns.html">DNS设置</a>成1.1.1.1 最好，路径： <code>/etc/docker/daemon.json</code> (记得是在打括号里面添加，自己查一下json是怎么写的)，不然下一步就会无法解析mojang官网。</p>
@@ -117,7 +116,7 @@
 <pre><code class="language-bash">docker volume create portainer_data
 docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
 </code></pre>
-<p>开启9000端口，你就可以看到这个界面了</p>
+<p>开启9000端口（记得在服务器安全组里添加端口访问权限），你就可以看到这个界面了，</p>
 <h3 id="安装我的世界">安装我的世界</h3>
 <p>下一步装我的世界，我选用了 https://github.com/itzg/docker-minecraft-server ，</p>
 <pre><code class="language-bash">#注意这里是root用户，其他用户请自行pwd查看路径
@@ -129,9 +128,9 @@ docker run -d -it -p 25565:25565 -e EULA=TRUE -v /root/data:/data --name mc itzg
 <p>在本地登陆我的世界，多人游戏，输入IP地址，就可以连上去了，<br>
 第一次连接之后，需要给自己开管理员权限，在portainer里面点attach到mc这个容器，输入op #你的名字 即可授权成功，后续的操作可以直接在游戏里/op了或者/whitelist了</p>
 <p>改<a href="https://minecraft-zh.gamepedia.com/Server.properties">server.properties</a>这种在wiki里面去搜吧，主要是把online-mode设置成false就可以让盗版玩家上线了（对于那种还没买的小伙伴。</p>
-<p>这里提一句，请支持正版国际服，mojang官网购买，支持支付宝，165元人民币说实话不是很贵。</p>
-<p>好了，可以要请好友上线一起玩了！！！</p>
-<p>PS：我准备下一个写写怎么玩服务器，物尽其用</p>
+<p>这里提一句，请<strong>支持正版国际服</strong>，mojang官网购买，支持支付宝，165元人民币说实话不是很贵。</p>
+<p>好了，可以要请好友上线一起玩了！！！总计花费时间（包括买阿里云到连接进去），从晚上9点到12点，非常的快速。其实不用docker安装也是一样的，但是docker后续有其他的作用，比如说nginx搭网站啥的。</p>
+<p>PS：我准备下一个写写怎么玩服务器，物尽其用，比如说VSCode的remote server啦，frp内网穿透啦，nginx搭网站啦，Wordpress写博客啦</p>
 
             </div>
             
