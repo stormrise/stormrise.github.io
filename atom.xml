@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://stormrise.github.io</id>
     <title>嗨，这里是stormrise！</title>
-    <updated>2020-05-20T15:47:09.289Z</updated>
+    <updated>2020-05-20T15:48:48.710Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://stormrise.github.io"/>
     <link rel="self" href="https://stormrise.github.io/atom.xml"/>
@@ -20,16 +20,15 @@
 <blockquote>
 <p><strong>IKSegmenter</strong> : 这是 IK 分词器的核心类。它是独立于 Lucene 的 Java 分词器实现。当您需要 在 Lucene 以外的环境中单独使用 IK 中文分词 组件时，IKSegmenter 正是您要找的。</p>
 </blockquote>
-<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2020/05/20/1iMVbXcdUGOHEAg.png" alt="WechatIMG10924.png" loading="lazy"></figure>
 <p>主要是我今天写的代码里，JProfiler 里排名第一的卡CPU就是它，我生成两百万数据的话，足足卡了我10分钟！！</p>
 ]]></summary>
         <content type="html"><![CDATA[<p>大名顶顶的中文分词器 https://code.google.com/archive/p/ik-analyzer/ ，今天这里我们主要不是用在elastic search上，而是用于基础的分词，</p>
 <blockquote>
 <p><strong>IKSegmenter</strong> : 这是 IK 分词器的核心类。它是独立于 Lucene 的 Java 分词器实现。当您需要 在 Lucene 以外的环境中单独使用 IK 中文分词 组件时，IKSegmenter 正是您要找的。</p>
 </blockquote>
-<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2020/05/20/1iMVbXcdUGOHEAg.png" alt="WechatIMG10924.png" loading="lazy"></figure>
 <p>主要是我今天写的代码里，JProfiler 里排名第一的卡CPU就是它，我生成两百万数据的话，足足卡了我10分钟！！</p>
 <!-- more -->
+<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2020/05/20/1iMVbXcdUGOHEAg.png" alt="WechatIMG10924.png" loading="lazy"></figure>
 <p>原因在于，我参考标准写法每次都新生成一个IKSegmenter对象，<br>
 下面是两个构造函数：</p>
 <pre><code class="language-java">/**
