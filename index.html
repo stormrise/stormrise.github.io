@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://stormrise.github.io/favicon.ico?v=1588091140648">
+<link rel="shortcut icon" href="https://stormrise.github.io/favicon.ico?v=1589989623039">
 <link rel="stylesheet" href="https://stormrise.github.io/styles/main.css">
 
 
@@ -30,7 +30,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://stormrise.github.io">
-        <img src="https://stormrise.github.io/images/avatar.png?v=1588091140648" class="site-logo">
+        <img src="https://stormrise.github.io/images/avatar.png?v=1589989623039" class="site-logo">
         <h1 class="site-title">嗨，这里是stormrise！</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -95,6 +95,32 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://stormrise.github.io/post/iksegment-fu-yong/">
+                  <h2 class="post-title">IKSegment 复用，避免new多个对象导致性能低下</h2>
+                </a>
+                <div class="post-date">
+                  2020-05-20
+                </div>
+                <div class="post-abstract">
+                  <p>大名顶顶的中文分词器 https://code.google.com/archive/p/ik-analyzer/ ，今天这里我们主要不是用在elastic search上，而是用于基础的分词，</p>
+<blockquote>
+<p><strong>IKSegmenter</strong> : 这是 IK 分词器的核心类。它是独立于 Lucene 的 Java 分词器实现。当您需要 在 Lucene 以外的环境中单独使用 IK 中文分词 组件时，IKSegmenter 正是您要找的。</p>
+</blockquote>
+<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2020/05/20/1iMVbXcdUGOHEAg.png" alt="WechatIMG10924.png" loading="lazy"></figure>
+<p>主要是我今天写的代码里，JProfiler 里排名第一的卡CPU就是它，我生成两百万数据的话，足足卡了我10分钟！！</p>
+
+                </div>
+              </div>
+              
+                <a class="right" href="https://stormrise.github.io/post/iksegment-fu-yong/">
+                  <div class="feature-container" style="background-image: url('https://i.loli.net/2020/05/20/1iMVbXcdUGOHEAg.png')">
+                  </div>
+                </a>
+              
+            </article>
           
             <article class="post-item">
               <div class="left">

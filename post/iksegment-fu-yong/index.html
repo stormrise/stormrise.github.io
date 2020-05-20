@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>IKSegment 复用，避免new多个对象导致性能低下 | 嗨，这里是stormrise！</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://stormrise.github.io/favicon.ico?v=1589989623039">
+<link rel="stylesheet" href="https://stormrise.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="大名顶顶的中文分词器 https://code.google.com/archive/p/ik-analyzer/ ，今天这里我们主要不是用在elastic search上，而是用于基础的分词，
+
+IKSegmenter : 这是 IK 分..." />
+    <meta name="keywords" content="Java" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://stormrise.github.io">
+        <img src="https://stormrise.github.io/images/avatar.png?v=1589989623039" class="site-logo">
+        <h1 class="site-title">嗨，这里是stormrise！</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/stormrise" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      随便写点东西的地方
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://stormrise.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">IKSegment 复用，避免new多个对象导致性能低下</h2>
+            <div class="post-date">2020-05-20</div>
+            
+              <div class="feature-container" style="background-image: url('https://i.loli.net/2020/05/20/1iMVbXcdUGOHEAg.png')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <p>大名顶顶的中文分词器 https://code.google.com/archive/p/ik-analyzer/ ，今天这里我们主要不是用在elastic search上，而是用于基础的分词，</p>
+<blockquote>
+<p><strong>IKSegmenter</strong> : 这是 IK 分词器的核心类。它是独立于 Lucene 的 Java 分词器实现。当您需要 在 Lucene 以外的环境中单独使用 IK 中文分词 组件时，IKSegmenter 正是您要找的。</p>
+</blockquote>
+<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2020/05/20/1iMVbXcdUGOHEAg.png" alt="WechatIMG10924.png" loading="lazy"></figure>
+<p>主要是我今天写的代码里，JProfiler 里排名第一的卡CPU就是它，我生成两百万数据的话，足足卡了我10分钟！！</p>
+<!-- more -->
+<p>原因在于，我参考标准写法每次都新生成一个IKSegmenter对象，<br>
+下面是两个构造函数：</p>
+<pre><code class="language-java">/**
+    * IK主分词器构造函数
+    * 默认最细粒度切分
+    * @param input
+    */
+public IKSegmentation(Reader input){
+    this(input , false);
+}
+
+/**
+    * IK主分词器构造函数
+    * @param input
+    * @param isMaxWordLength 当为true时，分词器进行最大词长切分
+    */
+public IKSegmentation(Reader input , boolean isMaxWordLength){
+    this.input = input ;
+    segmentBuff = new char[BUFF_SIZE];
+    context = new Context(segmentBuff , isMaxWordLength);
+    segmenters = Configuration.loadSegmenter();
+}
+
+</code></pre>
+<p>我们可以看到每个构造函数都必须传入input进去，<br>
+我就简单的写了</p>
+<pre><code class="language-java">String sentence = &quot;这是一句话&quot;;
+IKSegmentation iKSegmentation = new IKSegmentation(new StringReader(sentence), true);
+</code></pre>
+<p>然后包装成一个方法，每次传入一句话进去，这就导致了开篇的图中它吃掉了最多的CPU时间，</p>
+<p>网上搜寻了很久无果，我想着我要把这个东西挪出去，不能每次都生成，最好复用一下，</p>
+<p>一开始想的是我换一个Reader比如说什么InputstreamReader，但是发现并不可以，它都input是在构造的时候指定了就赋值好了，那么，仔细研究一下这个类，发现input还有一次被重新赋值的机会，就是reset函数</p>
+<pre><code class="language-java">/**
+    * 重置分词器到初始状态
+    * @param input
+    */
+public synchronized void reset(Reader input) {
+    this.input = input;
+    context.resetContext();
+    for(ISegmenter segmenter : segmenters){
+        segmenter.reset();
+    }
+}
+</code></pre>
+<p>可以看到源码里面调用reset的时候是可以新输入一个reader的，这就解决了大问题！</p>
+<p>我们把IKSegmentation定义在外面，注意这里有个小技巧（传入一个空字符串&quot;&quot;）初始化，然后调用函数时，重新生成一个StringReader并reset，这样我们就把排名第一的生成多个对象的问题给解决了！</p>
+<pre><code class="language-java">IKSegmentation iKSegmentation = new IKSegmentation(new StringReader(&quot;&quot;), true);
+
+public List&lt;String&gt; getIkWords(String sentence){
+    iKSegmentation.reset(new StringReader(sentence));
+    //.......
+}
+</code></pre>
+<p>什么，你要问排名第二的next咋办，这个源码里只有next方法能用，还能咋办，哈哈哈</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://stormrise.github.io/tag/Rw2eWhM32/" class="tag">
+                    Java
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://stormrise.github.io/post/wo-de-shi-jie/">
+                  <h3 class="post-title">
+                    搭建我的世界私服-2020
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
