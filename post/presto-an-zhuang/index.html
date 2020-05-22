@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>presto 安装 | 嗨，这里是stormrise！</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://stormrise.github.io/favicon.ico?v=1590155443998">
+<link rel="stylesheet" href="https://stormrise.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="
+集群已有hdfs和hive
+
+下载安装准备
+使用的是prestosql，开源版本（非Facebook prestodb），支持docker（后续可采用）
+
+jdk11:最新的333版本需要jdk11+，332需要jdk8u161+，321..." />
+    <meta name="keywords" content="集群" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://stormrise.github.io">
+        <img src="https://stormrise.github.io/images/avatar.png?v=1590155443998" class="site-logo">
+        <h1 class="site-title">嗨，这里是stormrise！</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/stormrise" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      随便写点东西的地方
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://stormrise.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">presto 安装</h2>
+            <div class="post-date">2020-05-22</div>
+            
+            <div class="post-content" v-pre>
+              <blockquote>
+<p>集群已有hdfs和hive</p>
+</blockquote>
+<h2 id="下载安装准备">下载安装准备</h2>
+<p>使用的是prestosql，开源版本（非Facebook prestodb），支持docker（后续可采用）</p>
+<blockquote>
+<p>jdk11:最新的333版本需要jdk11+，332需要jdk8u161+，321需要jdk8u151+，集群环境都不匹配，于是做了多版本jdk。</p>
+</blockquote>
+<p>新建一个文件夹 <code>presto-server</code> 放置三个东西</p>
+<!-- more -->
+<pre><code class="language-bash">#pwd:/root
+mkdir presto-server
+cd presto-server
+
+#jdk11
+wget https://code.aliyun.com/kar/oracle-jdk/raw/3c932f02aa11e79dc39e4a68f5b0483ec1d32abe/jdk-11.0.7_linux-x64_bin.tar.gz
+
+#presto-server
+wget https://repo1.maven.org/maven2/io/prestosql/presto-server/333/presto-server-333.tar.gz
+
+#presto-cli
+wget https://repo1.maven.org/maven2/io/prestosql/presto-cli/333/presto-cli-333-executable.jar
+
+tar xzf jdk-11.0.7_linux-x64_bin.tar.gz
+tar xzf presto-server-333.tar.gz
+mv presto-cli-333-executable.jar presto
+chmod +x presto
+
+</code></pre>
+<h2 id="配置">配置</h2>
+<p>将jdk环境变量放在 <code>bin/launcher</code> 这个shell脚本里，添加在exec之前</p>
+<pre><code class="language-bash">export JAVA_HOME=/root/presto-server/jdk-11.0.7
+export JRE_HOME=$JAVA_HOME/jre
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=./:$JAVA_HOME/lib:$JAVA_HOME/jre/lib:/root/presto-server/presto-server-333/lib
+</code></pre>
+<p>官方部署文档：https://prestosql.io/docs/current/installation/deployment.html</p>
+<p>相关配置：</p>
+<pre><code class="language-bash">mkdir etc
+
+# etc/node.properties
+node.environment=dev
+node.id=baisheng5
+node.data-dir=/mnt/disk10/presto/data
+
+# etc/config.properties
+coordinator=true
+node-scheduler.include-coordinator=true
+http-server.http.port=8765
+query.max-memory=160GB
+query.max-memory-per-node=16GB
+query.max-total-memory-per-node=22GB
+discovery-server.enabled=true
+discovery.uri=http://baisheng5:8765
+
+# etc/jvm.config
+-server
+-Xmx32G
+-XX:-UseBiasedLocking
+-XX:+UseG1GC
+-XX:G1HeapRegionSize=32M
+-XX:+ExplicitGCInvokesConcurrent
+-XX:+HeapDumpOnOutOfMemoryError
+-XX:+UseGCOverheadLimit
+-XX:+ExitOnOutOfMemoryError
+-XX:ReservedCodeCacheSize=512M
+-Djdk.attach.allowAttachSelf=true
+-Djdk.nio.maxCachedBufferSize=2000000
+
+# etc/log.properties
+io.prestosql=INFO
+
+# etc/catalog/hive.properties
+connector.name=hive-hadoop2
+hive.metastore.uri=thrift://baisheng6:9083
+hive.config.resources=/etc/hdfs1/conf/core-site.xml,/etc/hdfs1/conf/hdfs-site.xml
+</code></pre>
+<p>打包scp到其他节点，修改 <code>node.properties</code> 的 <code>node.id</code> 成对应名字，修改 <code>config.properties</code> 成worker模式</p>
+<h2 id="运行">运行</h2>
+<pre><code class="language-bash">#先启动scheduler，再启动worker
+./presto-server/presto-server-333/bin/launcher start
+
+#cli连接到hive
+./presto-server/presto --server baisheng5:8765 --catalog hive --schema default
+</code></pre>
+<p>UI界面：http://baisheng5:8765/ui/ 用户名：root，密码留空</p>
+<h2 id="一些坑">一些坑</h2>
+<ol>
+<li>
+<p>如果把scheduler停掉了没有先停worker的话，咋一看是没有问题，但是后续重启worker的时候一旦出现not running，running的，使用jps查看新启动是PID不同，证明老的worker没有停止，需要kill掉。</p>
+</li>
+<li>
+<p>由于集群的HDFS是HA模式，必须手动指定hive.config.resource才能解析nameservice1的问题。</p>
+</li>
+</ol>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://stormrise.github.io/tag/eUi_mg-la/" class="tag">
+                    集群
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://stormrise.github.io/post/iksegment-fu-yong/">
+                  <h3 class="post-title">
+                    IKSegment 复用，避免new多个对象导致性能低下
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

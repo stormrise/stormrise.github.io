@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://stormrise.github.io</id>
     <title>嗨，这里是stormrise！</title>
-    <updated>2020-05-20T15:48:48.710Z</updated>
+    <updated>2020-05-22T13:50:47.602Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://stormrise.github.io"/>
     <link rel="self" href="https://stormrise.github.io/atom.xml"/>
@@ -10,6 +10,141 @@
     <logo>https://stormrise.github.io/images/avatar.png</logo>
     <icon>https://stormrise.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, 嗨，这里是stormrise！</rights>
+    <entry>
+        <title type="html"><![CDATA[书单]]></title>
+        <id>https://stormrise.github.io/post/shu-dan/</id>
+        <link href="https://stormrise.github.io/post/shu-dan/">
+        </link>
+        <updated>2020-05-22T13:47:21.000Z</updated>
+        <summary type="html"><![CDATA[<p>放一下正在看的书</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>放一下正在看的书</p>
+<!-- more -->
+<p>从上到下是观看顺序，最下面的是正在看的</p>
+<ol>
+<li>数据结构</li>
+<li>Java编程思想</li>
+<li>剑指offer</li>
+<li>Java并发编程实践</li>
+<li>深入理解Java虚拟机</li>
+<li>设计模式</li>
+<li>Hadoop权威指南</li>
+</ol>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[presto 安装]]></title>
+        <id>https://stormrise.github.io/post/presto-an-zhuang/</id>
+        <link href="https://stormrise.github.io/post/presto-an-zhuang/">
+        </link>
+        <updated>2020-05-22T13:44:39.000Z</updated>
+        <summary type="html"><![CDATA[<blockquote>
+<p>集群已有hdfs和hive</p>
+</blockquote>
+<h2 id="下载安装准备">下载安装准备</h2>
+<p>使用的是prestosql，开源版本（非Facebook prestodb），支持docker（后续可采用）</p>
+<blockquote>
+<p>jdk11:最新的333版本需要jdk11+，332需要jdk8u161+，321需要jdk8u151+，集群环境都不匹配，于是做了多版本jdk。</p>
+</blockquote>
+<p>新建一个文件夹 <code>presto-server</code> 放置三个东西</p>
+]]></summary>
+        <content type="html"><![CDATA[<blockquote>
+<p>集群已有hdfs和hive</p>
+</blockquote>
+<h2 id="下载安装准备">下载安装准备</h2>
+<p>使用的是prestosql，开源版本（非Facebook prestodb），支持docker（后续可采用）</p>
+<blockquote>
+<p>jdk11:最新的333版本需要jdk11+，332需要jdk8u161+，321需要jdk8u151+，集群环境都不匹配，于是做了多版本jdk。</p>
+</blockquote>
+<p>新建一个文件夹 <code>presto-server</code> 放置三个东西</p>
+<!-- more -->
+<pre><code class="language-bash">#pwd:/root
+mkdir presto-server
+cd presto-server
+
+#jdk11
+wget https://code.aliyun.com/kar/oracle-jdk/raw/3c932f02aa11e79dc39e4a68f5b0483ec1d32abe/jdk-11.0.7_linux-x64_bin.tar.gz
+
+#presto-server
+wget https://repo1.maven.org/maven2/io/prestosql/presto-server/333/presto-server-333.tar.gz
+
+#presto-cli
+wget https://repo1.maven.org/maven2/io/prestosql/presto-cli/333/presto-cli-333-executable.jar
+
+tar xzf jdk-11.0.7_linux-x64_bin.tar.gz
+tar xzf presto-server-333.tar.gz
+mv presto-cli-333-executable.jar presto
+chmod +x presto
+
+</code></pre>
+<h2 id="配置">配置</h2>
+<p>将jdk环境变量放在 <code>bin/launcher</code> 这个shell脚本里，添加在exec之前</p>
+<pre><code class="language-bash">export JAVA_HOME=/root/presto-server/jdk-11.0.7
+export JRE_HOME=$JAVA_HOME/jre
+export PATH=$JAVA_HOME/bin:$PATH
+export CLASSPATH=./:$JAVA_HOME/lib:$JAVA_HOME/jre/lib:/root/presto-server/presto-server-333/lib
+</code></pre>
+<p>官方部署文档：https://prestosql.io/docs/current/installation/deployment.html</p>
+<p>相关配置：</p>
+<pre><code class="language-bash">mkdir etc
+
+# etc/node.properties
+node.environment=dev
+node.id=baisheng5
+node.data-dir=/mnt/disk10/presto/data
+
+# etc/config.properties
+coordinator=true
+node-scheduler.include-coordinator=true
+http-server.http.port=8765
+query.max-memory=160GB
+query.max-memory-per-node=16GB
+query.max-total-memory-per-node=22GB
+discovery-server.enabled=true
+discovery.uri=http://baisheng5:8765
+
+# etc/jvm.config
+-server
+-Xmx32G
+-XX:-UseBiasedLocking
+-XX:+UseG1GC
+-XX:G1HeapRegionSize=32M
+-XX:+ExplicitGCInvokesConcurrent
+-XX:+HeapDumpOnOutOfMemoryError
+-XX:+UseGCOverheadLimit
+-XX:+ExitOnOutOfMemoryError
+-XX:ReservedCodeCacheSize=512M
+-Djdk.attach.allowAttachSelf=true
+-Djdk.nio.maxCachedBufferSize=2000000
+
+# etc/log.properties
+io.prestosql=INFO
+
+# etc/catalog/hive.properties
+connector.name=hive-hadoop2
+hive.metastore.uri=thrift://baisheng6:9083
+hive.config.resources=/etc/hdfs1/conf/core-site.xml,/etc/hdfs1/conf/hdfs-site.xml
+</code></pre>
+<p>打包scp到其他节点，修改 <code>node.properties</code> 的 <code>node.id</code> 成对应名字，修改 <code>config.properties</code> 成worker模式</p>
+<h2 id="运行">运行</h2>
+<pre><code class="language-bash">#先启动scheduler，再启动worker
+./presto-server/presto-server-333/bin/launcher start
+
+#cli连接到hive
+./presto-server/presto --server baisheng5:8765 --catalog hive --schema default
+</code></pre>
+<p>UI界面：http://baisheng5:8765/ui/ 用户名：root，密码留空</p>
+<h2 id="一些坑">一些坑</h2>
+<ol>
+<li>
+<p>如果把scheduler停掉了没有先停worker的话，咋一看是没有问题，但是后续重启worker的时候一旦出现not running，running的，使用jps查看新启动是PID不同，证明老的worker没有停止，需要kill掉。</p>
+</li>
+<li>
+<p>由于集群的HDFS是HA模式，必须手动指定hive.config.resource才能解析nameservice1的问题。</p>
+</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[IKSegment 复用，避免new多个对象导致性能低下]]></title>
         <id>https://stormrise.github.io/post/iksegment-fu-yong/</id>
