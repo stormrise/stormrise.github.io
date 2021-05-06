@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>从1开始的程序员修炼之路？ | 嗨，这里是stormrise！</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://stormrise.github.io/favicon.ico?v=1620312697815">
+<link rel="stylesheet" href="https://stormrise.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="本人开始找工作了几个月，收集整理一些心路历程，给有心想要当🐎农的人提供一些建议
+前情提要：本人本科非科班出身，研究生跨学计算机，现已拿华为软件开发offer（后端）
+为什么是从1开始呢，因为我本科学了Java和数据库SQL和一点点的数据结..." />
+    <meta name="keywords" content="学习,吐槽" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://stormrise.github.io">
+        <img src="https://stormrise.github.io/images/avatar.png?v=1620312697815" class="site-logo">
+        <h1 class="site-title">嗨，这里是stormrise！</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/stormrise" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      随便写点东西的地方
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://stormrise.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">从1开始的程序员修炼之路？</h2>
+            <div class="post-date">2020-04-12</div>
+            
+            <div class="post-content" v-pre>
+              <p>本人开始找工作了几个月，收集整理一些心路历程，给有心想要当🐎农的人提供一些建议</p>
+<p>前情提要：本人本科非科班出身，研究生跨学计算机，现已拿华为软件开发offer（后端）</p>
+<p>为什么是从1开始呢，因为我本科学了Java和数据库SQL和一点点的数据结构，不算是完全0好吧，我先自诩一个1，那么要如何进行学习才能拿到大厂的offer呢🙂，请听我娓娓道来：</p>
+<!-- more -->
+<h2 id="学习路线">学习路线</h2>
+<p>如果你是0基础的话，建议先入门一个语言（这里推荐一下学python，简单方便，再考虑OOP），其他的废话我就不多说了，什么MOOC的学习资源一大把</p>
+<h3 id="刷题">刷题</h3>
+<p>首先说一点，我刷题都是用python刷的，因为题目主要讲求一个思路，我🙅‍♂️去背什么list，queue在java里怎么创建。</p>
+<ol>
+<li>
+<p>这里建议先从 <a href="https://leetcode.com/explore/interview/card/top-interview-questions-easy/">LeetCode Interview Easy</a> 这里开始，一共49道题，涵盖了简单的各种数据结构，先有个初步大概的印象，总之强烈建议新手先去搞定。</p>
+</li>
+<li>
+<p>有了基本的印象之后，那么我们就要祭出经典算法：剑指offer，有条件的就买本书哈，书中有详细的讲解，虽然书是c写的，但是相信你懂得，还是那句话题目主要讲求思路，语言不重要，大概能看懂就行，具体对应LeetCode的哪些题目呢，建议从这里寻找 <a href="https://cyc2018.github.io/CS-Notes/#/notes/%E5%89%91%E6%8C%87%20Offer%20%E9%A2%98%E8%A7%A3%20-%20%E7%9B%AE%E5%BD%951">CYC—剑指题解</a>，（这是2018年某大佬写的总结）当然这个也是提供了一个解法，可以先学习一遍。至此，你应该能搞定各大公司的笔试题（至少第一题最简单的了），甚至大多数手撕算法的面试也是出这些经典题目。</p>
+</li>
+<li>
+<p>接下来，一般都是推荐做LeetCode前300道题，经典易用，建议挑着做，medium，hard都要去尝试，做个大约200多道，之后就是反复练习一下自己做过的，争取记住，这样就笔试肯定1道过没有问题啦，我们就可以进入下个面试环节。</p>
+<p>PS：疫情期间，LeetCode推出了30天打卡挑战，题目都很简单，建议拿来培养刷题的规律性。</p>
+</li>
+</ol>
+<h3 id="看书">看书</h3>
+<p>这里要根据你的方向进行选择，比如我的后端Java，</p>
+<h3 id="实习">实习</h3>
+<h2 id="结尾">结尾</h2>
+<p>那么问题来了，这些东西帮助了我什么呢，答案是：什么都没有。</p>
+<p>因为我现有的offer是实习转正来的，实习的offer，当时什么也不会，但是就是给我发了一个，（这里感谢一下华为爸爸给的机会），</p>
+<p>最后，这其实是个吐槽文啦哈哈哈，其中的建议希望能给到你帮助</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://stormrise.github.io/tag/C4NMPI7hW/" class="tag">
+                    学习
+                  </a>
+                
+                  <a href="https://stormrise.github.io/tag/-GOZMOVyj/" class="tag">
+                    吐槽
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://stormrise.github.io/post/guan-yu-wei-sha-bu-yong-hexo-bo-ke-liao/">
+                  <h3 class="post-title">
+                    关于为啥不用hexo博客了
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

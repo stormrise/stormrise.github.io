@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://stormrise.github.io</id>
     <title>嗨，这里是stormrise！</title>
-    <updated>2021-05-06T14:49:52.498Z</updated>
+    <updated>2021-05-06T14:51:55.404Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://stormrise.github.io"/>
     <link rel="self" href="https://stormrise.github.io/atom.xml"/>
@@ -333,6 +333,45 @@ docker run -d -it -p 25565:25565 -e EULA=TRUE -v /root/data:/data --name mc itzg
 <p>这里提一句，请<strong>支持正版国际服</strong>，mojang官网购买，支持支付宝，165元人民币说实话不是很贵。</p>
 <p>好了，可以要请好友上线一起玩了！！！总计花费时间（包括买阿里云到连接进去），从晚上9点到12点，非常的快速。其实不用docker安装也是一样的，但是docker后续有其他的作用，比如说nginx搭网站啥的。</p>
 <p>PS：我准备下一个写写怎么玩服务器，物尽其用，比如说VSCode的remote server啦，frp内网穿透啦，nginx搭网站啦，Wordpress写博客啦</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[从1开始的程序员修炼之路？]]></title>
+        <id>https://stormrise.github.io/post/cong-1-kai-shi-de-cheng-xu-yuan-xiu-lian-zhi-lu/</id>
+        <link href="https://stormrise.github.io/post/cong-1-kai-shi-de-cheng-xu-yuan-xiu-lian-zhi-lu/">
+        </link>
+        <updated>2020-04-12T14:02:33.000Z</updated>
+        <summary type="html"><![CDATA[<p>本人开始找工作了几个月，收集整理一些心路历程，给有心想要当🐎农的人提供一些建议</p>
+<p>前情提要：本人本科非科班出身，研究生跨学计算机，现已拿华为软件开发offer（后端）</p>
+<p>为什么是从1开始呢，因为我本科学了Java和数据库SQL和一点点的数据结构，不算是完全0好吧，我先自诩一个1，那么要如何进行学习才能拿到大厂的offer呢🙂，请听我娓娓道来：</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>本人开始找工作了几个月，收集整理一些心路历程，给有心想要当🐎农的人提供一些建议</p>
+<p>前情提要：本人本科非科班出身，研究生跨学计算机，现已拿华为软件开发offer（后端）</p>
+<p>为什么是从1开始呢，因为我本科学了Java和数据库SQL和一点点的数据结构，不算是完全0好吧，我先自诩一个1，那么要如何进行学习才能拿到大厂的offer呢🙂，请听我娓娓道来：</p>
+<!-- more -->
+<h2 id="学习路线">学习路线</h2>
+<p>如果你是0基础的话，建议先入门一个语言（这里推荐一下学python，简单方便，再考虑OOP），其他的废话我就不多说了，什么MOOC的学习资源一大把</p>
+<h3 id="刷题">刷题</h3>
+<p>首先说一点，我刷题都是用python刷的，因为题目主要讲求一个思路，我🙅‍♂️去背什么list，queue在java里怎么创建。</p>
+<ol>
+<li>
+<p>这里建议先从 <a href="https://leetcode.com/explore/interview/card/top-interview-questions-easy/">LeetCode Interview Easy</a> 这里开始，一共49道题，涵盖了简单的各种数据结构，先有个初步大概的印象，总之强烈建议新手先去搞定。</p>
+</li>
+<li>
+<p>有了基本的印象之后，那么我们就要祭出经典算法：剑指offer，有条件的就买本书哈，书中有详细的讲解，虽然书是c写的，但是相信你懂得，还是那句话题目主要讲求思路，语言不重要，大概能看懂就行，具体对应LeetCode的哪些题目呢，建议从这里寻找 <a href="https://cyc2018.github.io/CS-Notes/#/notes/%E5%89%91%E6%8C%87%20Offer%20%E9%A2%98%E8%A7%A3%20-%20%E7%9B%AE%E5%BD%951">CYC—剑指题解</a>，（这是2018年某大佬写的总结）当然这个也是提供了一个解法，可以先学习一遍。至此，你应该能搞定各大公司的笔试题（至少第一题最简单的了），甚至大多数手撕算法的面试也是出这些经典题目。</p>
+</li>
+<li>
+<p>接下来，一般都是推荐做LeetCode前300道题，经典易用，建议挑着做，medium，hard都要去尝试，做个大约200多道，之后就是反复练习一下自己做过的，争取记住，这样就笔试肯定1道过没有问题啦，我们就可以进入下个面试环节。</p>
+<p>PS：疫情期间，LeetCode推出了30天打卡挑战，题目都很简单，建议拿来培养刷题的规律性。</p>
+</li>
+</ol>
+<h3 id="看书">看书</h3>
+<p>这里要根据你的方向进行选择，比如我的后端Java，</p>
+<h3 id="实习">实习</h3>
+<h2 id="结尾">结尾</h2>
+<p>那么问题来了，这些东西帮助了我什么呢，答案是：什么都没有。</p>
+<p>因为我现有的offer是实习转正来的，实习的offer，当时什么也不会，但是就是给我发了一个，（这里感谢一下华为爸爸给的机会），</p>
+<p>最后，这其实是个吐槽文啦哈哈哈，其中的建议希望能给到你帮助</p>
 ]]></content>
     </entry>
     <entry>
