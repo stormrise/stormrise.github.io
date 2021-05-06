@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>集群 | 嗨，这里是stormrise！</title>
+<title>Cent OS 单节点集群搭建 | 嗨，这里是stormrise！</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,14 @@
 
 
 
-    <meta name="description" content="随便写点东西的地方">
+    <meta name="description" content="install cent os
+这步废话
+CentOS 7 minimal
+
+Setup network
+nmcli d show ethernet card
+nmtui networkmanager: activate &amp; set..." />
+    <meta name="keywords" content="" />
   </head>
   <body>
     <div id="app" class="main">
@@ -92,37 +99,81 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: 集群</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://stormrise.github.io/post/presto-an-zhuang/">
-                  <h2 class="post-title">presto 安装</h2>
+          <div class="post-detail">
+            <h2 class="post-title">Cent OS 单节点集群搭建</h2>
+            <div class="post-date">2020-10-07</div>
+            
+            <div class="post-content" v-pre>
+              <h1 id="install-cent-os">install cent os</h1>
+<p>这步废话<br>
+CentOS 7 minimal</p>
+<ol>
+<li>Setup network<br>
+<code>nmcli d</code> show ethernet card<br>
+<code>nmtui</code> networkmanager: activate &amp; set hostname<br>
+<code>sudo systemctl stop firewalld</code><br>
+<code>sudo systemctl disable firewalld</code></li>
+</ol>
+<!-- more -->
+<ol start="2">
+<li>
+<p>修改为阿里源<br>
+<code>mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</code><br>
+<code>curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo</code><br>
+<code>yum update</code><br>
+<code>yum makecache</code></p>
+</li>
+<li>
+<p>OpenJDK8</p>
+<pre><code class="language-bash">yum install java-1.8.0-openjdk-devel
+alternatives --config java
+vim /etc/profile
+export JAVA_HOME=$(dirname $(dirname $(readlink $(readlink $(which javac)))))
+export PATH=$PATH:$JAVA_HOME/bin
+export CLASSPATH=.:$JAVA_HOME/jre/lib:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
+</code></pre>
+</li>
+</ol>
+<h1 id="安装组件">安装组件</h1>
+<h2 id="hdfs">HDFS</h2>
+<pre><code class="language-bash">wget https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/hadoop-3.3.0/hadoop-3.3.0.tar.gz
+sudo groupadd hadoop
+adduser hduser
+passwd hduser
+usermod -a -G wheel hduser
+usermod -a -G hadoop hduser
+sudo chown -R hduser:hadoop hadoop-3.3.0
+</code></pre>
+<p>https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html#Standalone_Operation</p>
+<h2 id="spark">Spark</h2>
+<pre><code class="language-bash">wget https://mirrors.tuna.tsinghua.edu.cn/apache/spark/spark-3.0.1/spark-3.0.1-bin-hadoop3.2.tgz
+sudo chown -R hduser:hadoop spark-3.0.1-bin-hadoop3.2
+</code></pre>
+<h1 id="some-error">some error:</h1>
+<ol>
+<li>warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory<pre><code class="language-bash">cat /etc/environment
+LANG=en_US.utf-8
+LC_ALL=en_US.utf-8
+</code></pre>
+</li>
+</ol>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://stormrise.github.io/post/shu-dan/">
+                  <h3 class="post-title">
+                    书单
+                  </h3>
                 </a>
-                <div class="post-date">
-                  2020-05-22
-                </div>
-                <div class="post-abstract">
-                  <blockquote>
-<p>集群已有hdfs和hive</p>
-</blockquote>
-<h2 id="下载安装准备">下载安装准备</h2>
-<p>使用的是prestosql，开源版本（非Facebook prestodb），支持docker（后续可采用）</p>
-<blockquote>
-<p>jdk11:最新的333版本需要jdk11+，332需要jdk8u161+，321需要jdk8u151+，集群环境都不匹配，于是做了多版本jdk。</p>
-</blockquote>
-<p>新建一个文件夹 <code>presto-server</code> 放置三个东西</p>
-
-                </div>
               </div>
-              
-            </article>
-          
+            
 
-          <div class="pagination-container">
-  
-  
-</div>
+            
+
+          </div>
 
         </div>
       </div>

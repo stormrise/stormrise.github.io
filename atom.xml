@@ -2,14 +2,86 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://stormrise.github.io</id>
     <title>嗨，这里是stormrise！</title>
-    <updated>2020-05-22T13:50:47.602Z</updated>
+    <updated>2021-05-06T14:49:52.498Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://stormrise.github.io"/>
     <link rel="self" href="https://stormrise.github.io/atom.xml"/>
     <subtitle>随便写点东西的地方</subtitle>
     <logo>https://stormrise.github.io/images/avatar.png</logo>
     <icon>https://stormrise.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, 嗨，这里是stormrise！</rights>
+    <rights>All rights reserved 2021, 嗨，这里是stormrise！</rights>
+    <entry>
+        <title type="html"><![CDATA[Cent OS 单节点集群搭建]]></title>
+        <id>https://stormrise.github.io/post/cent-os-dan-jie-dian-ji-qun-da-jian/</id>
+        <link href="https://stormrise.github.io/post/cent-os-dan-jie-dian-ji-qun-da-jian/">
+        </link>
+        <updated>2020-10-07T02:36:54.000Z</updated>
+        <summary type="html"><![CDATA[<h1 id="install-cent-os">install cent os</h1>
+<p>这步废话<br>
+CentOS 7 minimal</p>
+<ol>
+<li>Setup network<br>
+<code>nmcli d</code> show ethernet card<br>
+<code>nmtui</code> networkmanager: activate &amp; set hostname<br>
+<code>sudo systemctl stop firewalld</code><br>
+<code>sudo systemctl disable firewalld</code></li>
+</ol>
+]]></summary>
+        <content type="html"><![CDATA[<h1 id="install-cent-os">install cent os</h1>
+<p>这步废话<br>
+CentOS 7 minimal</p>
+<ol>
+<li>Setup network<br>
+<code>nmcli d</code> show ethernet card<br>
+<code>nmtui</code> networkmanager: activate &amp; set hostname<br>
+<code>sudo systemctl stop firewalld</code><br>
+<code>sudo systemctl disable firewalld</code></li>
+</ol>
+<!-- more -->
+<ol start="2">
+<li>
+<p>修改为阿里源<br>
+<code>mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</code><br>
+<code>curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo</code><br>
+<code>yum update</code><br>
+<code>yum makecache</code></p>
+</li>
+<li>
+<p>OpenJDK8</p>
+<pre><code class="language-bash">yum install java-1.8.0-openjdk-devel
+alternatives --config java
+vim /etc/profile
+export JAVA_HOME=$(dirname $(dirname $(readlink $(readlink $(which javac)))))
+export PATH=$PATH:$JAVA_HOME/bin
+export CLASSPATH=.:$JAVA_HOME/jre/lib:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
+</code></pre>
+</li>
+</ol>
+<h1 id="安装组件">安装组件</h1>
+<h2 id="hdfs">HDFS</h2>
+<pre><code class="language-bash">wget https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/hadoop-3.3.0/hadoop-3.3.0.tar.gz
+sudo groupadd hadoop
+adduser hduser
+passwd hduser
+usermod -a -G wheel hduser
+usermod -a -G hadoop hduser
+sudo chown -R hduser:hadoop hadoop-3.3.0
+</code></pre>
+<p>https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html#Standalone_Operation</p>
+<h2 id="spark">Spark</h2>
+<pre><code class="language-bash">wget https://mirrors.tuna.tsinghua.edu.cn/apache/spark/spark-3.0.1/spark-3.0.1-bin-hadoop3.2.tgz
+sudo chown -R hduser:hadoop spark-3.0.1-bin-hadoop3.2
+</code></pre>
+<h1 id="some-error">some error:</h1>
+<ol>
+<li>warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory<pre><code class="language-bash">cat /etc/environment
+LANG=en_US.utf-8
+LC_ALL=en_US.utf-8
+</code></pre>
+</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[书单]]></title>
         <id>https://stormrise.github.io/post/shu-dan/</id>
