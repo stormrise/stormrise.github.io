@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>树莓派docker装openwrt当旁路由 | 嗨，这里是stormrise！</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://stormrise.github.io/favicon.ico?v=1646921292540">
+<link rel="stylesheet" href="https://stormrise.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="网上教程很多，这里只是整理了一下本人的操作
+需要一个树莓派装好了docker，
+
+“树莓派爱好者基地”专版64位 Debian 功能介绍（内含下载链接）：
+https://github.com/openfans-community-offi..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://stormrise.github.io">
+        <img src="https://stormrise.github.io/images/avatar.png?v=1646921292540" class="site-logo">
+        <h1 class="site-title">嗨，这里是stormrise！</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/stormrise" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      随便写点东西的地方
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://stormrise.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">树莓派docker装openwrt当旁路由</h2>
+            <div class="post-date">2022-03-10</div>
+            
+            <div class="post-content" v-pre>
+              <p>网上教程很多，这里只是整理了一下本人的操作<br>
+需要一个树莓派装好了docker，</p>
+<!-- more -->
+<p>“树莓派爱好者基地”专版64位 Debian 功能介绍（内含下载链接）：</p>
+<p>https://github.com/openfans-community-offical/Debian-Pi-Aarch64/blob/master/README_zh.md</p>
+<blockquote>
+<p>前情提要： 主路由ip是192.168.100.1</p>
+</blockquote>
+<h2 id="开始">开始</h2>
+<pre><code class="language-bash"># 网卡混杂
+sudo ip link set eth0 promisc on 
+# 创建网络
+docker network create -d macvlan --subnet=192.168.100.0/24 --gateway=192.168.100.1 -o parent=eth0 macnet
+# 拉取镜像
+docker pull registry.cn-shanghai.aliyuncs.com/suling/openwrt:arm64
+# 启动
+docker run --restart always --name openwrt -d --network macnet --privileged registry.cn-shanghai.aliyuncs.com/suling/openwrt:latest /sbin/init
+# 进入容器修改参数
+docker exec -it openwrt bash
+vim /etc/config/network
+# 所有的 192.168.123.x 需要根据树莓派所处网段修改，option gateway和option dns填写路由器的 IP
+/etc/init.d/network restart
+</code></pre>
+<blockquote>
+<p>此处旁路由ip设置为了192.168.100.2</p>
+</blockquote>
+<p>进入旁路由的web管理页面 root/password</p>
+<p>协议：静态地址</p>
+<p>IPV4 地址：192.168.100.2（此项保持不变）</p>
+<p>子网掩码: 255.255.255.0</p>
+<p>网关：填为上级路由 IP，一般是上级路由控制面板访问地址，以上文为例，改为: 192.168.100.1</p>
+<p>广播：把上级路由网段 IP 最后一段改为 255，以上文为例，改为 192.168.100.255</p>
+<p>DNS 地址：同样为上级路由 IP，以上文为例：改为 192.168.100.1</p>
+<p>打钩：忽略此接口/不在此接口提供 DHCP 服务 （在页面底部）</p>
+<h2 id="工作方式">工作方式</h2>
+<ol>
+<li>如果选择打勾旁路由不提供DHCP，则需要手动改自己的设备为静态ip，网关dns都指向旁路由ip：192.168.100.2，</li>
+<li>如果选择旁路由接管所有的DHCP，首先在「网络」-「接口-「 LAN 口」修改为打勾，提供DHCP，并且勾选强制，「DHCP选项」 分别填写「3,192.168.100.2」与「 6,192.168.100.2」，重启「旁路由」和「主路由」即可</li>
+</ol>
+<h2 id="后记">后记</h2>
+<p>如果你严格按照此文章操作，但出现 无法上网、访问国内网站缓慢 等症状，可在完成上文全部步骤的基础上，在“网络 - 防火墙 - 自定义规则”中新增一行 iptables 规则并重启防火墙再试：<br>
+<code>iptables -t nat -I POSTROUTING -j MASQUERADE</code><br>
+若仍未解决，可以尝试删除原有两条规则并重启防火墙再试：<br>
+<code>iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53</code><br>
+<code>iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53</code><br>
+如果以上两个方法未能解决，请尝试在 Lan 口的“物理设置”中取消“桥接接口”的打勾，并在下方的“接口”中选择“eth0”，保存并应用再试。但请注意，此时树莓派的板载无线网卡将无法使用 (有信号但无法上网)。</p>
+<p>参考</p>
+<ol>
+<li><a href="https://sspai.com/post/59708">从听说到上手，人人都能看懂的旁路由入门指南</a></li>
+<li><a href="https://mlapp.cn/376.html">在Docker 中运行 OpenWrt 旁路网关</a></li>
+<li><a href="https://mlapp.cn/1008.html">自编译 OpenWrt 系列 - 旁路由设置指南</a></li>
+</ol>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://stormrise.github.io/post/cent-os-dan-jie-dian-ji-qun-da-jian/">
+                  <h3 class="post-title">
+                    Cent OS 单节点集群搭建
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

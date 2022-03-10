@@ -2,14 +2,77 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://stormrise.github.io</id>
     <title>嗨，这里是stormrise！</title>
-    <updated>2021-09-22T10:52:51.189Z</updated>
+    <updated>2022-03-10T14:08:17.320Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://stormrise.github.io"/>
     <link rel="self" href="https://stormrise.github.io/atom.xml"/>
     <subtitle>随便写点东西的地方</subtitle>
     <logo>https://stormrise.github.io/images/avatar.png</logo>
     <icon>https://stormrise.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2021, 嗨，这里是stormrise！</rights>
+    <rights>All rights reserved 2022, 嗨，这里是stormrise！</rights>
+    <entry>
+        <title type="html"><![CDATA[树莓派docker装openwrt当旁路由]]></title>
+        <id>https://stormrise.github.io/post/shu-mei-pai-docker-zhuang-openwrt-dang-pang-lu-you/</id>
+        <link href="https://stormrise.github.io/post/shu-mei-pai-docker-zhuang-openwrt-dang-pang-lu-you/">
+        </link>
+        <updated>2022-03-10T13:43:47.000Z</updated>
+        <summary type="html"><![CDATA[<p>网上教程很多，这里只是整理了一下本人的操作<br>
+需要一个树莓派装好了docker，</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>网上教程很多，这里只是整理了一下本人的操作<br>
+需要一个树莓派装好了docker，</p>
+<!-- more -->
+<p>“树莓派爱好者基地”专版64位 Debian 功能介绍（内含下载链接）：</p>
+<p>https://github.com/openfans-community-offical/Debian-Pi-Aarch64/blob/master/README_zh.md</p>
+<blockquote>
+<p>前情提要： 主路由ip是192.168.100.1</p>
+</blockquote>
+<h2 id="开始">开始</h2>
+<pre><code class="language-bash"># 网卡混杂
+sudo ip link set eth0 promisc on 
+# 创建网络
+docker network create -d macvlan --subnet=192.168.100.0/24 --gateway=192.168.100.1 -o parent=eth0 macnet
+# 拉取镜像
+docker pull registry.cn-shanghai.aliyuncs.com/suling/openwrt:arm64
+# 启动
+docker run --restart always --name openwrt -d --network macnet --privileged registry.cn-shanghai.aliyuncs.com/suling/openwrt:latest /sbin/init
+# 进入容器修改参数
+docker exec -it openwrt bash
+vim /etc/config/network
+# 所有的 192.168.123.x 需要根据树莓派所处网段修改，option gateway和option dns填写路由器的 IP
+/etc/init.d/network restart
+</code></pre>
+<blockquote>
+<p>此处旁路由ip设置为了192.168.100.2</p>
+</blockquote>
+<p>进入旁路由的web管理页面 root/password</p>
+<p>协议：静态地址</p>
+<p>IPV4 地址：192.168.100.2（此项保持不变）</p>
+<p>子网掩码: 255.255.255.0</p>
+<p>网关：填为上级路由 IP，一般是上级路由控制面板访问地址，以上文为例，改为: 192.168.100.1</p>
+<p>广播：把上级路由网段 IP 最后一段改为 255，以上文为例，改为 192.168.100.255</p>
+<p>DNS 地址：同样为上级路由 IP，以上文为例：改为 192.168.100.1</p>
+<p>打钩：忽略此接口/不在此接口提供 DHCP 服务 （在页面底部）</p>
+<h2 id="工作方式">工作方式</h2>
+<ol>
+<li>如果选择打勾旁路由不提供DHCP，则需要手动改自己的设备为静态ip，网关dns都指向旁路由ip：192.168.100.2，</li>
+<li>如果选择旁路由接管所有的DHCP，首先在「网络」-「接口-「 LAN 口」修改为打勾，提供DHCP，并且勾选强制，「DHCP选项」 分别填写「3,192.168.100.2」与「 6,192.168.100.2」，重启「旁路由」和「主路由」即可</li>
+</ol>
+<h2 id="后记">后记</h2>
+<p>如果你严格按照此文章操作，但出现 无法上网、访问国内网站缓慢 等症状，可在完成上文全部步骤的基础上，在“网络 - 防火墙 - 自定义规则”中新增一行 iptables 规则并重启防火墙再试：<br>
+<code>iptables -t nat -I POSTROUTING -j MASQUERADE</code><br>
+若仍未解决，可以尝试删除原有两条规则并重启防火墙再试：<br>
+<code>iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53</code><br>
+<code>iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53</code><br>
+如果以上两个方法未能解决，请尝试在 Lan 口的“物理设置”中取消“桥接接口”的打勾，并在下方的“接口”中选择“eth0”，保存并应用再试。但请注意，此时树莓派的板载无线网卡将无法使用 (有信号但无法上网)。</p>
+<p>参考</p>
+<ol>
+<li><a href="https://sspai.com/post/59708">从听说到上手，人人都能看懂的旁路由入门指南</a></li>
+<li><a href="https://mlapp.cn/376.html">在Docker 中运行 OpenWrt 旁路网关</a></li>
+<li><a href="https://mlapp.cn/1008.html">自编译 OpenWrt 系列 - 旁路由设置指南</a></li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Cent OS 单节点集群搭建]]></title>
         <id>https://stormrise.github.io/post/cent-os-dan-jie-dian-ji-qun-da-jian/</id>
