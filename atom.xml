@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://stormrise.github.io</id>
     <title>嗨，这里是stormrise！</title>
-    <updated>2022-03-10T14:10:33.620Z</updated>
+    <updated>2022-04-01T14:13:48.232Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://stormrise.github.io"/>
     <link rel="self" href="https://stormrise.github.io/atom.xml"/>
@@ -10,6 +10,40 @@
     <logo>https://stormrise.github.io/images/avatar.png</logo>
     <icon>https://stormrise.github.io/favicon.ico</icon>
     <rights>All rights reserved 2022, 嗨，这里是stormrise！</rights>
+    <entry>
+        <title type="html"><![CDATA[webpack5 babel esm fix]]></title>
+        <id>https://stormrise.github.io/post/webpack5-babel-esm-fix/</id>
+        <link href="https://stormrise.github.io/post/webpack5-babel-esm-fix/">
+        </link>
+        <updated>2022-04-01T14:04:10.000Z</updated>
+        <summary type="html"><![CDATA[<p>'*.mjs' file or a '*.js' file where the package.json contains '&quot;type&quot;: &quot;module&quot;'<br>
+Module not found: Error: Can't resolve @babel/runtime/helpers/esm ...</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>'*.mjs' file or a '*.js' file where the package.json contains '&quot;type&quot;: &quot;module&quot;'<br>
+Module not found: Error: Can't resolve @babel/runtime/helpers/esm ...</p>
+<!-- more -->
+<p>问题链接：</p>
+<p>https://github.com/webpack/webpack/issues/11467</p>
+<p>简单来说就是webpack5之后，加入了对引入mjs等的strict模式并且默认启用，导致一些项目import会有问题。</p>
+<p>同时确认自己的webpack版本和babel runtime的版本尽可能是最新的</p>
+<p>解决方法是在webpack的config下面的module.rules加入以下：</p>
+<pre><code class="language-json">{
+  test: /\.m?js/,
+  resolve: {
+    fullySpecified: false,
+  },
+},
+</code></pre>
+<p>使用webpack-chain的修复方式，苦于不知道resolve那一步怎么写，找了很久终于找到了解决办法</p>
+<p>https://github.com/neutrinojs/webpack-chain/issues/296</p>
+<p>https://github.com/vuejs/vue-cli/blob/next/packages/%40vue/cli-service/lib/config/base.js#L16-L21</p>
+<pre><code class="language-js">webpackConfig.module
+      .rule('esm')
+        .test(/\.m?jsx?$/)
+        .resolve.set('fullySpecified', false)
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[树莓派docker装openwrt当旁路由]]></title>
         <id>https://stormrise.github.io/post/shu-mei-pai-docker-zhuang-openwrt-dang-pang-lu-you/</id>

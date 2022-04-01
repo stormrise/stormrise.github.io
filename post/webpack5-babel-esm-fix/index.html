@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Cent OS 单节点集群搭建 | 嗨，这里是stormrise！</title>
+<title>webpack5 babel esm fix | 嗨，这里是stormrise！</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,13 +18,8 @@
 
 
 
-    <meta name="description" content="install cent os
-这步废话
-CentOS 7 minimal
-
-Setup network
-nmcli d show ethernet card
-nmtui networkmanager: activate &amp; set..." />
+    <meta name="description" content="'*.mjs' file or a '*.js' file where the package.json contains '&quot;type&quot;: &quot;module&quot;'
+Module not found: E..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -100,72 +95,42 @@ nmtui networkmanager: activate &amp; set..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Cent OS 单节点集群搭建</h2>
-            <div class="post-date">2020-10-07</div>
+            <h2 class="post-title">webpack5 babel esm fix</h2>
+            <div class="post-date">2022-04-01</div>
             
             <div class="post-content" v-pre>
-              <h1 id="install-cent-os">install cent os</h1>
-<p>这步废话<br>
-CentOS 7 minimal</p>
-<ol>
-<li>Setup network<br>
-<code>nmcli d</code> show ethernet card<br>
-<code>nmtui</code> networkmanager: activate &amp; set hostname<br>
-<code>sudo systemctl stop firewalld</code><br>
-<code>sudo systemctl disable firewalld</code></li>
-</ol>
+              <p>'*.mjs' file or a '*.js' file where the package.json contains '&quot;type&quot;: &quot;module&quot;'<br>
+Module not found: Error: Can't resolve @babel/runtime/helpers/esm ...</p>
 <!-- more -->
-<ol start="2">
-<li>
-<p>修改为阿里源<br>
-<code>mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</code><br>
-<code>curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo</code><br>
-<code>yum update</code><br>
-<code>yum makecache</code></p>
-</li>
-<li>
-<p>OpenJDK8</p>
-<pre><code class="language-bash">yum install java-1.8.0-openjdk-devel
-alternatives --config java
-vim /etc/profile
-export JAVA_HOME=$(dirname $(dirname $(readlink $(readlink $(which javac)))))
-export PATH=$PATH:$JAVA_HOME/bin
-export CLASSPATH=.:$JAVA_HOME/jre/lib:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
+<p>问题链接：</p>
+<p>https://github.com/webpack/webpack/issues/11467</p>
+<p>简单来说就是webpack5之后，加入了对引入mjs等的strict模式并且默认启用，导致一些项目import会有问题。</p>
+<p>同时确认自己的webpack版本和babel runtime的版本尽可能是最新的</p>
+<p>解决方法是在webpack的config下面的module.rules加入以下：</p>
+<pre><code class="language-json">{
+  test: /\.m?js/,
+  resolve: {
+    fullySpecified: false,
+  },
+},
 </code></pre>
-</li>
-</ol>
-<h1 id="安装组件">安装组件</h1>
-<h2 id="hdfs">HDFS</h2>
-<pre><code class="language-bash">wget https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/hadoop-3.3.0/hadoop-3.3.0.tar.gz
-sudo groupadd hadoop
-adduser hduser
-passwd hduser
-usermod -a -G wheel hduser
-usermod -a -G hadoop hduser
-sudo chown -R hduser:hadoop hadoop-3.3.0
+<p>使用webpack-chain的修复方式，苦于不知道resolve那一步怎么写，找了很久终于找到了解决办法</p>
+<p>https://github.com/neutrinojs/webpack-chain/issues/296</p>
+<p>https://github.com/vuejs/vue-cli/blob/next/packages/%40vue/cli-service/lib/config/base.js#L16-L21</p>
+<pre><code class="language-js">webpackConfig.module
+      .rule('esm')
+        .test(/\.m?jsx?$/)
+        .resolve.set('fullySpecified', false)
 </code></pre>
-<p>https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html#Standalone_Operation</p>
-<h2 id="spark">Spark</h2>
-<pre><code class="language-bash">wget https://mirrors.tuna.tsinghua.edu.cn/apache/spark/spark-3.0.1/spark-3.0.1-bin-hadoop3.2.tgz
-sudo chown -R hduser:hadoop spark-3.0.1-bin-hadoop3.2
-</code></pre>
-<h1 id="some-error">some error:</h1>
-<ol>
-<li>warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory<pre><code class="language-bash">cat /etc/environment
-LANG=en_US.utf-8
-LC_ALL=en_US.utf-8
-</code></pre>
-</li>
-</ol>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://stormrise.github.io/post/shu-dan/">
+                <a href="https://stormrise.github.io/post/shu-mei-pai-docker-zhuang-openwrt-dang-pang-lu-you/">
                   <h3 class="post-title">
-                    书单
+                    树莓派docker装openwrt当旁路由
                   </h3>
                 </a>
               </div>
